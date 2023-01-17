@@ -1,6 +1,6 @@
 import Fastify from "fastify";
-
-const app = Fastify();
+import cors from "@fastify/cors";
+import { PrismaClient } from "@prisma/client";
 
 /**
  * Método HTTP: Get(buscar informção),
@@ -9,9 +9,15 @@ const app = Fastify();
  * Patch(Quando vai ser atualizado uma informação especifica de algum recurso),
  *  Delete(quando deleta algum recurso do back-end)
  */
+const app = Fastify();
+const prisma = new PrismaClient();
 
-app.get("/", () => {
-  return "Hello World";
+app.register(cors);
+
+app.get("/", async () => {
+  const habits = await prisma.habit.findMany();
+
+  return habits;
 });
 
 app
