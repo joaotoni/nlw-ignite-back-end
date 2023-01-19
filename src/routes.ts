@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "./lib/prisma";
 
 export async function appRoutes(app: FastifyInstance) {
-  app.get("/habits", async (request) => {
+  app.post("/habits", async (request) => {
     // itens requisitados para busca de informação: title e weekDays
     const creatHabitBody = z.object({
       title: z.string(),
