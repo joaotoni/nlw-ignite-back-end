@@ -33,15 +33,15 @@ export async function appRoutes(app: FastifyInstance) {
   });
 
   app.get("/day", async (request) => {
-    const getDayParans = z.object({
+    const getDayParams = z.object({
       date: z.coerce.date(),
     });
 
-    const { date } = getDayParans.parse(request.query);
+    const { date } = getDayParams.parse(request.query);
 
-    const parseDate = dayjs(date).startOf("day");
+    const parsedDate = dayjs(date).startOf("day");
 
-    const weekDay = dayjs(date).get("day");
+    const weekDay = parsedDate.get("day");
 
     const possibleHabits = await prisma.habit.findMany({
       where: {
@@ -57,7 +57,7 @@ export async function appRoutes(app: FastifyInstance) {
     });
     const day = await prisma.day.findUnique({
       where: {
-        date: parseDate.toDate(),
+        date: parsedDate.toDate(),
       },
       include: {
         dayHabits: true,
@@ -70,6 +70,7 @@ export async function appRoutes(app: FastifyInstance) {
 
     return {
       possibleHabits,
+      completeHabits,
     };
   });
 
@@ -109,6 +110,11 @@ export async function appRoutes(app: FastifyInstance) {
     });
 
     if (dayHabit) {
+      await prisma.dayHabit.delete({
+        where: {
+          id: dayHabit.id,
+        },
+      });
       //remover marcação de completo
     } else {
       // Completar o Habito
@@ -125,14 +131,15 @@ export async function appRoutes(app: FastifyInstance) {
     //[retornar uma array com varias informações dentro]
 
     const summary = await prisma.$queryRaw`
-    Select D.id, D.date,
+    Select   D.id, D.date,
+     
     ( 
       SELECT
-        cast(count(*) as float)
-      FROM day_habits DH
+      cast(count(*) as float)
+      FROM days_habits DH
       WHERE 
         DH.day_id = D.id
-    ) as completed
+    ) as completed,
     (
       SELECT
         cast(count(*) as float)
@@ -140,7 +147,7 @@ export async function appRoutes(app: FastifyInstance) {
       JOIN habits H
         ON H.id = HWD.habit_id
       WHERE
-        HWD.week_day = cast(strftime('%w', D.date/1000.0, 'unixepoch'))
+        HWD.week_day = cast(strftime('%w', D.date/1000.0, 'unixepoch') as date )
         AND h.created_at <= D.date
     ) as amount
     FROM days D
