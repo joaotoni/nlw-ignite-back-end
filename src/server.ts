@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { prisma } from "./lib/prisma";
 import { appRoutes } from "./routes";
+import  serverless from "serverless-http"
 
 /**
  * Método HTTP: Get(buscar informção),
@@ -22,3 +23,5 @@ app
   .then(() => {
     console.log("HTTP Server running");
   });
+
+  // module.exports.handler = serverless(app)
