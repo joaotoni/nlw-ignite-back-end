@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const cors_1 = __importDefault(require("@fastify/cors"));
 const routes_1 = require("./routes");
+const serverless_http_1 = __importDefault(require("serverless-http"));
 /**
  * Método HTTP: Get(buscar informção),
  * Post(uma rota que vai criar alguma coisa),
@@ -23,4 +24,4 @@ app
     .then(() => {
     console.log("HTTP Server running");
 });
-// module.exports.handler = serverless(app)
+module.exports.handler = (0, serverless_http_1.default)(app);

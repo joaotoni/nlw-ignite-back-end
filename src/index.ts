@@ -24,4 +24,4 @@ app
     console.log("HTTP Server running");
   });
 
-  // module.exports.handler = serverless(app)
+  module.exports.handler = serverless(app as any)
