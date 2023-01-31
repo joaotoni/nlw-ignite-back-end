@@ -25,6 +25,6 @@ Para usar o back-end pro mobile, é necessario realizar essas mudanças no index
 
 </br>
 
-#Tecnologias usadas:
+# Tecnologias usadas:
 
 Fastify, Prisma, Dayjs, Zod, Nodejs, Typescript
