@@ -20,3 +20,5 @@ Dessa maneira, é so acessar o aplicativo no dia atual e marcar o quadrado do h�
 # Mobile:
 
 Para usar o back-end pro mobile, é necessario realizar essas mudanças no index.ts
+
+<img src="src/img/readme.png">
